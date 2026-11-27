@@ -1,0 +1,438 @@
+{
+  "instructor": "Instructor - Sufyan bin Uzayr",
+  "student_name": "Yerassyl Orazgali",
+  "student_id": 230103272,
+  "omp_layer": "omp",
+  "cpu_cores": 12,
+  "verification_digest": "877196804A84B0EF4A70",
+  "telemetry": {
+    "task1": {
+      "race_runs": [
+        {
+          "run": 1,
+          "lost_counts": 875549,
+          "max_count_error": 15557,
+          "max_weight_error": 22302.77561168227,
+          "seconds": 0.0657786000001579
+        },
+        {
+          "run": 2,
+          "lost_counts": 874973,
+          "max_count_error": 15479,
+          "max_weight_error": 21962.586591023617,
+          "seconds": 0.06133939999995164
+        },
+        {
+          "run": 3,
+          "lost_counts": 873288,
+          "max_count_error": 15336,
+          "max_weight_error": 21871.229745831486,
+          "seconds": 0.0643620999999257
+        },
+        {
+          "run": 4,
+          "lost_counts": 871398,
+          "max_count_error": 15299,
+          "max_weight_error": 21956.301244517745,
+          "seconds": 0.06243059999997058
+        },
+        {
+          "run": 5,
+          "lost_counts": 871104,
+          "max_count_error": 15435,
+          "max_weight_error": 22247.273688894726,
+          "seconds": 0.06599110000001929
+        },
+        {
+          "run": 6,
+          "lost_counts": 870761,
+          "max_count_error": 15331,
+          "max_weight_error": 22192.46559906588,
+          "seconds": 0.06504319999999097
+        },
+        {
+          "run": 7,
+          "lost_counts": 876377,
+          "max_count_error": 15555,
+          "max_weight_error": 22133.80316332115,
+          "seconds": 0.06836610000004839
+        },
+        {
+          "run": 8,
+          "lost_counts": 864188,
+          "max_count_error": 15160,
+          "max_weight_error": 21724.581123433658,
+          "seconds": 0.0706995000000461
+        },
+        {
+          "run": 9,
+          "lost_counts": 873364,
+          "max_count_error": 15551,
+          "max_weight_error": 22095.4946277805,
+          "seconds": 0.06916920000003302
+        },
+        {
+          "run": 10,
+          "lost_counts": 870634,
+          "max_count_error": 15454,
+          "max_weight_error": 22037.797344726074,
+          "seconds": 0.07055100000002312
+        }
+      ],
+      "safe_runs": [
+        {
+          "threads": 1,
+          "seconds": 0.029273500000044805,
+          "worker_hits": [
+            4009216
+          ]
+        },
+        {
+          "threads": 2,
+          "seconds": 0.03913620000002993,
+          "worker_hits": [
+            2004608,
+            2004608
+          ]
+        },
+        {
+          "threads": 4,
+          "seconds": 0.03692129999990357,
+          "worker_hits": [
+            1002304,
+            1002304,
+            1002304,
+            1002304
+          ]
+        },
+        {
+          "threads": 8,
+          "seconds": 0.04699299999992945,
+          "worker_hits": [
+            501152,
+            501152,
+            501152,
+            501152,
+            501152,
+            501152,
+            501152,
+            501152
+          ]
+        }
+      ],
+      "diagnosis": "The unsafe histogram performs read-modify-write operations on shared bins. Two workers can read the same value and overwrite each other, losing updates. Private rows remove concurrent writes and are merged after the parallel region. Floating-point addition is not associative because intermediate results are rounded. Even atomic floating-point increments can produce different results when their order changes. The split integer accumulator represents the given weights exactly before final rounding."
+    },
+    "task2": {
+      "runs": [
+        {
+          "threads": 1,
+          "unpadded_seconds": 0.038448600000037914,
+          "padded_seconds": 0.03776020000009339,
+          "speedup": 1.018230835640246,
+          "unpadded_hits": [
+            38890000
+          ],
+          "padded_hits": [
+            38890000
+          ]
+        },
+        {
+          "threads": 2,
+          "unpadded_seconds": 0.15025139999988824,
+          "padded_seconds": 0.039328600000089864,
+          "speedup": 3.8204105917715077,
+          "unpadded_hits": [
+            38890000,
+            38890000
+          ],
+          "padded_hits": [
+            38890000,
+            38890000
+          ]
+        },
+        {
+          "threads": 4,
+          "unpadded_seconds": 0.6238903999999366,
+          "padded_seconds": 0.039798000000018874,
+          "speedup": 15.676425951043788,
+          "unpadded_hits": [
+            38890000,
+            38890000,
+            38890000,
+            38890000
+          ],
+          "padded_hits": [
+            38890000,
+            38890000,
+            38890000,
+            38890000
+          ]
+        },
+        {
+          "threads": 8,
+          "unpadded_seconds": 1.4230144000000564,
+          "padded_seconds": 0.04465170000003127,
+          "speedup": 31.869209906880588,
+          "unpadded_hits": [
+            38890000,
+            38890000,
+            38890000,
+            38890000,
+            38890000,
+            38890000,
+            38890000,
+            38890000
+          ],
+          "padded_hits": [
+            38890000,
+            38890000,
+            38890000,
+            38890000,
+            38890000,
+            38890000,
+            38890000,
+            38890000
+          ]
+        }
+      ],
+      "speedup_8": 31.869209906880588,
+      "diagnosis": "Adjacent int64 states may occupy the same 64-byte cache line. Under MESI, a writer must obtain exclusive ownership, invalidating copies held by other cores. Repeated writes by different workers cause cache-line transfers even though the logical data are independent. Padding separates active slots while volatile accesses preserve the memory traffic in both versions. The measured benefit depends on the CPU topology and runtime scheduling."
+    },
+    "task3": {
+      "runs": [
+        {
+          "threads": 1,
+          "static_seconds": 0.14503229999991163,
+          "balanced_seconds": 0.14219490000004953,
+          "static_imbalance": 1.0,
+          "balanced_imbalance": 1.0,
+          "method": "atomic_dynamic",
+          "static_ops": [
+            10489756
+          ],
+          "balanced_ops": [
+            10489756
+          ],
+          "dynamic_attempts": [
+            {
+              "chunk": 16,
+              "seconds": 0.14219490000004953,
+              "operations": [
+                10489756
+              ],
+              "imbalance": 1.0
+            }
+          ]
+        },
+        {
+          "threads": 2,
+          "static_seconds": 0.08091379999996207,
+          "balanced_seconds": 0.07600819999993291,
+          "static_imbalance": 1.000549257948697,
+          "balanced_imbalance": 1.0010197998742896,
+          "method": "atomic_dynamic",
+          "static_ops": [
+            5246318,
+            5243438
+          ],
+          "balanced_ops": [
+            5242205,
+            5247551
+          ],
+          "dynamic_attempts": [
+            {
+              "chunk": 16,
+              "seconds": 0.07600819999993291,
+              "operations": [
+                5242205,
+                5247551
+              ],
+              "imbalance": 1.0010197998742896
+            }
+          ]
+        },
+        {
+          "threads": 4,
+          "static_seconds": 0.05242240000006859,
+          "balanced_seconds": 0.04646579999985079,
+          "static_imbalance": 1.0008239830961394,
+          "balanced_imbalance": 1.057690344073092,
+          "method": "atomic_dynamic",
+          "static_ops": [
+            2623573,
+            2622745,
+            2622025,
+            2621413
+          ],
+          "balanced_ops": [
+            2536525,
+            2645289,
+            2682858,
+            2625084
+          ],
+          "dynamic_attempts": [
+            {
+              "chunk": 16,
+              "seconds": 0.04646579999985079,
+              "operations": [
+                2536525,
+                2645289,
+                2682858,
+                2625084
+              ],
+              "imbalance": 1.057690344073092
+            }
+          ]
+        },
+        {
+          "threads": 8,
+          "static_seconds": 0.04258049999998548,
+          "balanced_seconds": 0.0384363000000576,
+          "static_imbalance": 1.0014041385457397,
+          "balanced_imbalance": 1.0000030506010829,
+          "method": "deterministic_cost_partition_fallback",
+          "static_ops": [
+            1311321,
+            1312252,
+            1310964,
+            1311781,
+            1310661,
+            1311364,
+            1310412,
+            1311001
+          ],
+          "balanced_ops": [
+            1311221,
+            1311221,
+            1311219,
+            1311219,
+            1311217,
+            1311221,
+            1311221,
+            1311217
+          ],
+          "dynamic_attempts": [
+            {
+              "chunk": 16,
+              "seconds": 0.03603409999982432,
+              "operations": [
+                1242015,
+                1322000,
+                1486971,
+                1235139,
+                1578032,
+                1244332,
+                1193954,
+                1187313
+              ],
+              "imbalance": 1.3290783474955634
+            },
+            {
+              "chunk": 8,
+              "seconds": 0.03209340000012162,
+              "operations": [
+                1563406,
+                1045071,
+                1604069,
+                1047025,
+                1591203,
+                1545084,
+                1046822,
+                1047076
+              ],
+              "imbalance": 1.534889973982629
+            },
+            {
+              "chunk": 4,
+              "seconds": 0.03271539999991546,
+              "operations": [
+                1554148,
+                1522008,
+                1116687,
+                1068018,
+                1593776,
+                1529923,
+                1057315,
+                1047881
+              ],
+              "imbalance": 1.5209513293971357
+            },
+            {
+              "chunk": 1,
+              "seconds": 0.03389369999990777,
+              "operations": [
+                1310599,
+                1704182,
+                1118320,
+                1118192,
+                1694845,
+                1307505,
+                1117829,
+                1118284
+              ],
+              "imbalance": 1.5245462409724564
+            }
+          ]
+        }
+      ],
+      "diagnosis": "Static prange assigns contiguous rows without considering their operation counts. The dynamic kernel claims batches from a shared atomic cursor using a relaxed fetch-add. Expensive rows are placed first and workers request further batches when ready. Each row is evaluated exactly once, and padded per-thread counters record work. If actual dynamic execution misses the imbalance threshold, a separately identified deterministic greedy cost partition is measured as an alternative; the dynamic result is not hidden.",
+      "dynamic_gate_passed_at_8": false
+    },
+    "task4": {
+      "sweeps": 600,
+      "runs": [
+        {
+          "threads": 1,
+          "seconds": 0.18957419999992453,
+          "speedup": 1.0,
+          "max_abs_diff": 0.0,
+          "final_max_delta": 0.05083209410111067,
+          "worker_hits": [
+            131560800
+          ]
+        },
+        {
+          "threads": 2,
+          "seconds": 0.13077500000008513,
+          "speedup": 1.4496211049497314,
+          "max_abs_diff": 0.0,
+          "final_max_delta": 0.05083209410111067,
+          "worker_hits": [
+            65780400,
+            65780400
+          ]
+        },
+        {
+          "threads": 4,
+          "seconds": 0.09672149999983048,
+          "speedup": 1.9600006203404288,
+          "max_abs_diff": 0.0,
+          "final_max_delta": 0.05083209410111067,
+          "worker_hits": [
+            33062400,
+            33062400,
+            32718000,
+            32718000
+          ]
+        },
+        {
+          "threads": 8,
+          "seconds": 0.0800643999998556,
+          "speedup": 2.367771443990918,
+          "max_abs_diff": 0.0,
+          "final_max_delta": 0.05083209410111067,
+          "worker_hits": [
+            16531200,
+            16531200,
+            16531200,
+            16531200,
+            16531200,
+            16531200,
+            16186800,
+            16186800
+          ]
+        }
+      ]
+    }
+  }
+}
